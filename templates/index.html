@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Notes</title>
+	<script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+	<script>
+		$(document).on('focusin', '.note form', function(){
+			var this_id = $(this).parent().attr('id');
+			$('#'+this_id).css("background-color", "#9f9");
+			var text = $(this).serialize()
+			$(document).on('focusout', '.note form', function(){
+				var this_id = $(this).parent().attr('id');
+				$('#'+this_id).css("background-color", "#ff9");
+				var newtext = $(this).serialize()
+				if(newtext === text){
+					console.log('no change');
+				}else{
+					$.post('/edit/'+this_id, $(this).serialize(), function(res){
+						$('#notes').html(res);
+					})
+					return false;
+				}
+			})
+		})
+		$(document).ready(function(){
+    		$('#main form').submit(function(){
+    			$.post('/note', $(this).serialize(), function(res){
+    				$('#notes').html(res);
+    				$('#title').val('');
+    			});
+    			return false;
+    		});
+    	});
+	</script>
+	<style>
+		.note {
+			width: 200px;
+			height: 200px;
+			border: 1px solid #666;
+			text-align: center;
+			margin: 5px;
+			background-color: #ff9;
+		}
+	</style>
+</head>
+<body>
+<h3>Notes app</h3>
+<div id='notes'>
+{% for note in notes %}
+	<div class='note' id='{{note.id}}'>
+		<h4>{{note.title}}</h4>
+		<form action="/edit/{{note.id}}" method="POST">
+			<textarea name="description" placeholder="Your note here..." rows="8" cols="20">{{note.description}}</textarea>
+		</form>
+	</div>
+{% endfor %}
+</div>
+<h3>Make a new note!</h3>
+<div id="main">
+<form action="/note" method="POST">
+	<input type="text" name="title" placeholder="Title..." id="title">
+	<input type="submit" value="New Note">
+</form>
+</div>
+</body>
+</html>

@@ -1,0 +1,8 @@
+{% for note in notes %}
+	<div class='note' id='{{note.id}}'>
+		<h4>{{note.title}}</h4>
+		<form action="/edit/{{note.id}}" method="POST">
+			<textarea name="description" placeholder="Your note here..." rows="8" cols="20">{{note.description}}</textarea>
+		</form>
+	</div>
+{% endfor %}
