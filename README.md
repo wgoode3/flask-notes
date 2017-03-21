@@ -14,8 +14,9 @@ $ pip install virtualenv
 $ cd ~/flask-notes
 $ virtualenv flaskenv
 $ source flaskenv/bin/activate
+$ pip install flask==0.10.1
 ```
-3. Import notes_db_notes.sql into your MySQL
+3. Import notes_db_notes.sql into your MySQL.
 4. Edit mysqlconnection.py to the correct user, password, and port:
 ```python
 config = {
